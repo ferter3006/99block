@@ -1,38 +1,96 @@
-.App {
-  text-align: center;
+.thebox {
+    transition: all 1s;
+    background-color: coral;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.themiddle {
+    transition: all 0.5s;
+    top: 45%;
+    bottom: 45%;
+    left: 45%;
+    right: 45%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.thetop {
+    transition: all 0.5s;
+    top: 0%;
+    bottom: 90%;
+
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.theleft {
+    transition: all 0.5s;
+    right: 90%;
+    left: 0%;
 }
 
-.App-link {
-  color: #61dafb;
+.theright {
+    transition: all 0.5s;
+    right: 0%;
+    left: 86.5%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.thebottom {
+    transition: all 0.5s;
+    top: 86.5%;
+    bottom: 0%;
+}
+
+.thewall{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.walltouch{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 22px;    
+}
+
+.goldspan{
+    background-color: gold;
+    color: black;
+    font-weight: 500;
+    margin-right: 3px;
+    padding: 1px;
+}
+
+.silverspan{
+    background-color: silver;
+    color: black;
+    font-weight: 500;
+    margin-right: 3px;
+    padding: 1px;
+}
+
+.bronzespan{
+    background-color: brown;
+    color: black;
+    font-weight: 500;
+    padding: 1px;
+}
+
+.complet0 {
+    background-color: darkgreen;
+}
+
+.complet1 {
+    background-color: darkblue;
+}
+
+.complet2 {
+    background-color: darkred;
 }
