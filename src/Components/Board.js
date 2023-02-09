@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) {    
+function Board({ state, stage, setStagesState, stagesState, setSelectedStage, appState }) {
 
     const wallTouchTimeDelay = 100
     const boxTransitionTime = 450
@@ -13,6 +13,8 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
     const [wallRight, setWallRight] = useState('thewall')
     const [wallBottom, setWallBottom] = useState('thewall')
 
+    const [muvin, setMuvin] = useState(false)
+
     const [topOper, setTopOper] = useState(state.game[stage].topWall)
     const [rightOper, setRightOper] = useState(state.game[stage].rightWall)
     const [leftOper, setLeftOPer] = useState(state.game[stage].leftWall)
@@ -23,11 +25,34 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
     const [movements, setMovements] = useState(0)
 
     const handleRestart = () => {
+        if (muvin) { return }
         setPosition('themiddle')
         setTopOrBot('')
         setLeftOrRight('')
         setBoxValue(state.game[stage].boxValue)
         setMovements(0)
+    }
+
+    const sendPuntuacion = () => {
+        fetch(process.env.REACT_APP_URLSERVERPOSTENTRY, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${appState.user.token}`,
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                [process.env.REACT_APP_RULE_SHORT]: process.env.REACT_APP_RULE_LONG,
+                'name': appState.user.name,
+                'stage': stage,
+                'moves': movements
+            })
+        })
+            .then(response => response.json())
+            .then(jsonResponse => {
+                console.log(jsonResponse);
+            })
+
     }
 
     useEffect(() => {
@@ -40,7 +65,7 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
     }, [stage])
 
     useEffect(() => {
-      
+
         if (boxValue === 99) {
             if (movements === state.game[stage].gold) {
                 alert('olé! medalla de oro')
@@ -62,12 +87,15 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
                 setStagesState({
                     ...stagesState, [stage]: { ...stagesState[stage], completed: true, movements: movements }
                 })
-                setSelectedStage('')
             }
+            sendPuntuacion()
+            setSelectedStage('')
         }
     }, [boxValue])
 
     const handleClick = (direction) => {
+        if (muvin) { return }
+        setMuvin(true)
         switch (direction) {
             case 'top':
                 if (topOrBot !== 'thetop') {
@@ -78,6 +106,7 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
                         setTimeout(() => {
                             setWallTop('thewall')
                         }, wallTouchTimeDelay);
+                        setMuvin(false)
                     }, boxTransitionTime - 50);
                 }
                 break;
@@ -90,6 +119,7 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
                         setTimeout(() => {
                             setWallBottom('thewall')
                         }, wallTouchTimeDelay);
+                        setMuvin(false)
                     }, boxTransitionTime - 50);
                 }
                 break;
@@ -102,6 +132,7 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
                         setTimeout(() => {
                             setWallLeft('thewall')
                         }, wallTouchTimeDelay);
+                        setMuvin(false)
                     }, boxTransitionTime - 50);
                 }
                 break;
@@ -114,11 +145,13 @@ function Board({ state, stage, setStagesState, stagesState, setSelectedStage }) 
                         setTimeout(() => {
                             setWallRight('thewall')
                         }, wallTouchTimeDelay);
+                        setMuvin(false)
                     }, boxTransitionTime - 50);
                 }
                 break;
             default:
                 break;
+
         }
     }
 
